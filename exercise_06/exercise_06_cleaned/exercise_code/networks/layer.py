@@ -133,6 +133,10 @@ class LeakyRelu:
         # Implement the forward pass of LeakyRelu activation function          #
         ########################################################################
 
+        cache = np.copy(x)
+        outputs = np.copy(x)
+        outputs[x<=0] = outputs[x<=0] * self.slope
+
         ########################################################################
         #                           END OF YOUR CODE                           #
         ########################################################################
@@ -147,6 +151,11 @@ class LeakyRelu:
         # TODO:                                                                #
         # Implement the backward pass of LeakyRelu activation function         #
         ########################################################################
+
+        x = cache
+        d = np.ones_like(x)
+        d[x<=0] = self.slope
+        dx = d * dout
 
         ########################################################################
         #                           END OF YOUR CODE                           #
@@ -172,6 +181,9 @@ class Tanh:
         # Implement the forward pass of Tanh activation function               #
         ########################################################################
 
+        outputs = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+        cache = outputs
+
         ########################################################################
         #                           END OF YOUR CODE                           #
         ########################################################################
@@ -186,6 +198,10 @@ class Tanh:
         # TODO:                                                                #
         # Implement the backward pass of Tanh activation function              #
         ########################################################################
+
+        x = cache
+        dx = 1 - x ** 2
+        dx = dx * dout
 
         ########################################################################
         #                           END OF YOUR CODE                           #
