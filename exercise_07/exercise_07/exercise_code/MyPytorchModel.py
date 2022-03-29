@@ -22,7 +22,18 @@ class MyPytorchModel(pl.LightningModule):
         ########################################################################
 
 
-        pass
+        # very simple linear model with ReLU activation function
+        self.model = nn.Sequential(
+            nn.Linear(input_size, hparams["n_hidden"]),
+            #nn.BatchNorm1d(hparams["n_hidden"]),
+            nn.ReLU(),
+            #nn.Dropout(p=0.5),
+            #nn.Linear(hparams["n_hidden"], hparams["n_hidden2"]),
+            #nn.BatchNorm1d(hparams["n_hidden2"]),
+            #nn.ReLU(),
+            #nn.Dropout(p=0.5),
+            nn.Linear(hparams["n_hidden"], num_classes),
+        )
 
         ########################################################################
         #                           END OF YOUR CODE                           #
@@ -84,7 +95,7 @@ class MyPytorchModel(pl.LightningModule):
     def prepare_data(self):
 
         # create dataset
-        CIFAR_ROOT = "../datasets/cifar10"
+        CIFAR_ROOT = "../../datasets/cifar10"
         my_transform = None
         mean = [0.485, 0.456, 0.406]
         std = [0.229, 0.224, 0.225]
@@ -93,7 +104,13 @@ class MyPytorchModel(pl.LightningModule):
         # If you want, you can also perform data augmentation!                 #
         ########################################################################
 
-        pass
+        my_transform = transforms.Compose([
+            transforms.RandomApply((transforms.RandomHorizontalFlip(p=0.8),
+                                     transforms.RandomResizedCrop((32,32))), p=0.1),
+            
+            transforms.ToTensor(),
+            transforms.Normalize(mean, std)
+            ])
 
         ########################################################################
         #                           END OF YOUR CODE                           #
@@ -134,7 +151,7 @@ class MyPytorchModel(pl.LightningModule):
         ########################################################################
 
 
-        pass
+        optim = torch.optim.Adam(self.model.parameters(), self.hparams["learning_rate"])
 
         ########################################################################
         #                           END OF YOUR CODE                           #

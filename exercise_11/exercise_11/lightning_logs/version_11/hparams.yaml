@@ -1,0 +1,4 @@
+embedding_dim: 22
+hidden_size: 35
+num_embeddings: 5002
+use_lstm: true
